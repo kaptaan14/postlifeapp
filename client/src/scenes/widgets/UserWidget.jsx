@@ -11,6 +11,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { baseUrl } from "Urls";
 
 
 const UserWidget = ({ userId, picturePath }) => {
@@ -29,7 +30,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
 
   const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+    const response = await fetch(`${baseUrl}/users/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });

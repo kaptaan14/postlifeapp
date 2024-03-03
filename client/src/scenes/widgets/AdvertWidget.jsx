@@ -1,4 +1,5 @@
 import { Typography, useTheme } from "@mui/material";
+import { baseUrl } from "Urls";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 
@@ -20,7 +21,7 @@ const AdvertWidget = () => {
         width="100%"
         height="auto"
         alt="advert"
-        src="http://localhost:3001/assets/add.jpg"
+        src={`${baseUrl}/assets/add.jpg`}
         style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
       />
       <FlexBetween>
