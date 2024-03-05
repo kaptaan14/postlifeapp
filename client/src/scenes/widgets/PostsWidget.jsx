@@ -10,7 +10,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const token = useSelector((state) => state.token);
 
   const getPosts = async () => {
-    const response = await fetch(`${baseUrl}:3001/posts`, {
+    const response = await fetch(`${baseUrl}/posts`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
       "Cache-Control": "no-cache",
