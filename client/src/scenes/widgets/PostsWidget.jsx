@@ -13,6 +13,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     const response = await fetch(`${baseUrl}:3001/posts`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
+      "Cache-Control": "no-cache",
     });
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
