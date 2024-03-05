@@ -24,6 +24,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
+        "Cache-Control": "no-cache",
       } 
     );
     const data = await response.json();
@@ -42,7 +43,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   return (
     <>
-      {posts.map(
+      {posts.slice().reverse().map(
         ({
           _id,
           userId,
