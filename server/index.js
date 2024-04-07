@@ -57,9 +57,6 @@ app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
 
-app.get('/',()=>{
-    res.json("Hello from Server);
-})
 
 //Mongo Setup
 const PORT = process.env.PORT || 8001
