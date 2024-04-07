@@ -1,1 +1,1 @@
-export const baseUrl = "https://postlifeapp-pamn.vercel.app"
+export const baseUrl = "https://postlife-kaptaan.koyeb.app/"
