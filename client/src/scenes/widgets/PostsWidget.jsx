@@ -12,22 +12,23 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const getPosts = async () => {
     const response = await fetch(`${baseUrl}/posts`, {
       method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-      "Cache-Control": "no-cache",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+      },
     });
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
   };
 
   const getUserPosts = async () => {
-    const response = await fetch(
-      `${baseUrl}/posts/${userId}/posts`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+    const response = await fetch(`${baseUrl}/posts/${userId}/posts`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
         "Cache-Control": "no-cache",
-      } 
-    );
+      },
+    });
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
   };
@@ -38,39 +39,40 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, []); 
-
-  // posts.reverse();
+  }, []);
 
   return (
     <>
-      {posts.slice().reverse().map(
-        ({
-          _id,
-          userId,
-          firstName,
-          lastName,
-          description,
-          location,
-          picturePath,
-          userPicturePath,
-          likes,
-          comments,
-        }) => (
-          <PostWidget
-            key={_id}
-            postId={_id}
-            postUserId={userId}
-            name={`${firstName} ${lastName}`}
-            description={description}
-            location={location}
-            picturePath={picturePath}
-            userPicturePath={userPicturePath}
-            likes={likes}
-            comments={comments}
-          />
-        )
-      )}
+      {posts && Array.isArray(posts) && posts
+        .slice()
+        .reverse()
+        .map(
+          ({
+            _id,
+            userId,
+            firstName,
+            lastName,
+            description,
+            location,
+            picturePath,
+            userPicturePath,
+            likes,
+            comments,
+          }) => (
+            <PostWidget
+              key={_id}
+              postId={_id}
+              postUserId={userId}
+              name={`${firstName} ${lastName}`}
+              description={description}
+              location={location}
+              picturePath={picturePath}
+              userPicturePath={userPicturePath}
+              likes={likes}
+              comments={comments}
+            />
+          )
+        )}
     </>
   );
 };

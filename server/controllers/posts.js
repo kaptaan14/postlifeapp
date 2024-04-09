@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 export const createPost = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    const { userId, description } = req.body;
     const user = await User.findById(userId);
     const newPost = new Post({
       userId,
@@ -11,8 +11,6 @@ export const createPost = async (req, res) => {
       lastName: user.lastName,
       location: user.location,
       description,
-      userPicturePath: user.picturePath,
-      picturePath,
       likes: {},
       comments: [],
     });
@@ -51,6 +49,7 @@ export const likePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
     const post = await Post.findById(id);
+    console.log(post);  
     const isLiked = post.likes.get(userId);
 
     if (isLiked) {
@@ -65,6 +64,23 @@ export const likePost = async (req, res) => {
       { new: true }
     );
 
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+};
+
+export const commentPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+    const post = await Post.findById(id);
+    post.comments.push(comment);
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { comments: post.comments },
+      { new: true }
+    );
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(404).json({ msg: error.message });

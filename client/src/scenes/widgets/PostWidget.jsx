@@ -12,6 +12,8 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { InputBase } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 const PostWidget = ({
   postId,
@@ -30,10 +32,25 @@ const PostWidget = ({
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
+  const [comment, setComment] = useState("");
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+
+  const patchComment = async () => {
+    const response = await fetch(`${baseUrl}/posts/${postId}/comment`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment: comment }),
+    });
+    const updatedPost = await response.json();
+    dispatch(setPost({ post: updatedPost }));
+    setComment("");
+  };
 
   const patchLike = async () => {
     const response = await fetch(`${baseUrl}/posts/${postId}/like`, {
@@ -59,15 +76,7 @@ const PostWidget = ({
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
-      {picturePath && (
-        <img
-          width="100%"
-          height="auto"
-          alt="post"
-          style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={`${baseUrl}/assets/${picturePath}`}
-        />
-      )}
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
@@ -95,15 +104,55 @@ const PostWidget = ({
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
-              </Typography>
-            </Box>
-          ))}
-          <Divider />
+          <FlexBetween width="100%" mb={"1rem"}>
+            <InputBase
+              placeholder="Write a comment..."
+              onChange={(e) => setComment(e.target.value)}
+              value={comment}
+              sx={{
+                width: "90%",
+                backgroundColor: palette.neutral.light,
+                borderRadius: "1rem 0rem 0rem 1rem",
+                padding: "0.5rem 1rem",
+              }}
+            />
+            <IconButton disabled={!comment} onClick={patchComment}>
+              <SendIcon
+                sx={{ color: primary, width: "2rem", fontSize: "2rem" }}
+              />
+            </IconButton>
+          </FlexBetween>
+          <Box
+            maxHeight={"200px"}
+            sx={{
+              overflowX: "hidden",
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: primary,
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+              },
+            }}
+          >
+            {comments
+              .slice()
+              .reverse()
+              .map((comment, i) => (
+                <Box key={`${name}-${i}`}>
+                  <Divider />
+                  <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                    {comment}
+                  </Typography>
+                </Box>
+              ))}
+            <Divider />
+          </Box>
         </Box>
       )}
     </WidgetWrapper>

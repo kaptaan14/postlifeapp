@@ -21,7 +21,6 @@ const ProfilePage = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    console.log(data);
     setUser(data);
   };
 
@@ -34,7 +33,7 @@ const ProfilePage = () => {
     <Box>
       <Navbar />
       <Divider sx={{ mb: "5rem" }} />
-      <Box
+      <Box 
         width="100%"
         padding="2rem 6%"
         display={isNonMobileScreens ? "flex" : "block"}
